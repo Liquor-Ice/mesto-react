@@ -1,29 +1,33 @@
-function Main() {
-  function handleEditAvatarClick() {
-    document.querySelector('.popup_type_avatarChange').classList.add('popup_opened');
-  };
+import React from "react";
+import api from "../utils/Api";
 
-  function handleEditProfileClick() {
-    document.querySelector('.popup_type_profile').classList.add('popup_opened');
-  };
+function Main({onEditProfile, onAddPlace, onEditAvatar}) {
+  const [userName, setUserName] = React.useState('Северин');
+  const [userDescription, setUserDescription] = React.useState('Картограф');
+  const [userAvatar, setUserAvatar] = React.useState();
 
-  function handleAddPlaceClick() {
-    document.querySelector('.popup_type_card').classList.add('popup_opened');
-  };
+  React.useEffect(()=>{
+    api.getUserInfo()
+      .then(info => {
+        setUserName(info.name);
+        setUserDescription(info.about);
+        setUserAvatar(info.avatar);
+      })
+  },[])
 
   return (
     <main className="content page__container">
       <section className="profile">
-        <div className="profile__avatar-container" onClick={handleEditAvatarClick}></div>
-        <img src="#" alt="аватарка" className="profile__avatar" />
+        <div className="profile__avatar-container" onClick={onEditAvatar}></div>
+        <img src={userAvatar} alt="аватарка" className="profile__avatar" />
         <div className="profile__info">
           <div className="profile__container">
-            <h1 className="profile__name page__overflow">Северин Бакле</h1>
-            <button className="profile__edit page__button" type="button" onClick={handleEditProfileClick} aria-label="редактировать профиль"></button>
+            <h1 className="profile__name page__overflow">{userName}</h1>
+            <button className="profile__edit page__button" type="button" onClick={onEditProfile} aria-label="редактировать профиль"></button>
           </div>
-          <p className="profile__about page__overflow">Картограф виртуальных миров</p>
+          <p className="profile__about page__overflow">{userDescription}</p>
         </div>
-        <button className="profile__add-button page__button" type="button" onClick={handleAddPlaceClick} aria-label="добавить место"></button>
+        <button className="profile__add-button page__button" type="button" onClick={onAddPlace} aria-label="добавить место"></button>
       </section>
       <section className="elements" aria-label="Места">
         
