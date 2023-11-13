@@ -4,7 +4,7 @@ class Api {
     this._headers = headers;
   }
 
-  onError(response) {
+  _checkResponse(response) {
     if (response.ok) {
       return response.json();
     } else {
@@ -18,7 +18,7 @@ class Api {
       headers: this._headers,
       method: 'GET'
     })
-      .then((response) => this.onError(response))
+      .then((response) => this._checkResponse(response))
   }
 
   // /users/me
@@ -31,7 +31,7 @@ class Api {
         about: about
       })
     })
-      .then((response) => this.onError(response))
+      .then((response) => this._checkResponse(response))
   }
 
   // /cards
@@ -40,7 +40,7 @@ class Api {
       headers: this._headers,
       method: 'GET'
     })
-      .then((response) => this.onError(response))
+      .then((response) => this._checkResponse(response))
   }
 
   // /cards
@@ -53,7 +53,7 @@ class Api {
         link: link
       })
     })
-    .then((response) => this.onError(response))
+    .then((response) => this._checkResponse(response))
   }
 
   // /cards/*cardID*
@@ -62,7 +62,7 @@ class Api {
       headers: this._headers,
       method: 'DELETE'
     })
-    .then((response) => this.onError(response))
+    .then((response) => this._checkResponse(response))
   }
 
   // /cards/*cardID*/likes
@@ -71,7 +71,7 @@ class Api {
       headers: this._headers,
       method: 'PUT'
     })
-    .then((response) => this.onError(response))
+    .then((response) => this._checkResponse(response))
   }
 
   // /cards/*cardID*/likes
@@ -80,7 +80,7 @@ class Api {
       headers: this._headers,
       method: 'DELETE'
     })
-    .then((response) => this.onError(response))
+    .then((response) => this._checkResponse(response))
   }
 
   // /users/me/avatar
@@ -92,7 +92,7 @@ class Api {
         avatar: avatar
       })
     })
-    .then((response) => this.onError(response))
+    .then((response) => this._checkResponse(response))
   }
 }
 
