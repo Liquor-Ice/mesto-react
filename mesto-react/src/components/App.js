@@ -9,6 +9,7 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState(false);
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(true);
@@ -19,10 +20,14 @@ function App() {
   function handleAddPlaceClick() {
     setIsAddPlacePopupOpen(true);
   };
+  function handleCardClick(selectedCard) {
+    setSelectedCard(selectedCard);
+  };
   function closeAllPopups() {
     setIsAddPlacePopupOpen(false);
     setIsEditProfilePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
+    setSelectedCard(false);
   }
 
   return (
@@ -33,6 +38,7 @@ function App() {
           onAddPlace={handleAddPlaceClick}
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
+          onCardClick={handleCardClick}
         />
         <Footer />
         
@@ -76,7 +82,10 @@ function App() {
         >
           <button className="popup__button page__button" type="button" aria-label="удалить карточку">Да</button>
         </PopupWithForm>
-        <ImagePopup />
+        <ImagePopup 
+          card={selectedCard}
+          onClose={closeAllPopups} 
+        />
 
         <template id="card-template">
           <article className="card">
