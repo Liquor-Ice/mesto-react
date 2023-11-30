@@ -1,30 +1,9 @@
 import React from "react";
-import api from "../utils/Api";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
+function Main({cards, onEditProfile, onAddPlace, onEditAvatar, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = React.useContext(CurrentUserContext);
-
-  const [cards, setCards] = React.useState([]);
-
-  const mapCards = cards => {
-    return cards.map(item => ({
-      id: item._id,
-      link: item.link,
-      name: item.name,
-      likes: item.likes,
-      owner: item.owner,
-    }))
-  };
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then(data => {
-        setCards(mapCards(data))
-      })
-      .catch(console.error)
-  }, [])
 
   return (
     <main className="content page__container">
@@ -43,9 +22,13 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, onCardClick}) {
       <section className="elements" aria-label="Места">
         {cards.map((item) => (
           <Card 
-            key={item.id} 
+            key={item._id} 
             card={item}
             onCardClick={onCardClick}
+            onCardLike={onCardLike}
+            onCardDelete={onCardDelete}
+            baseClass="card__like page__button"
+            activateClass="card__like_liked"
           />
         ))}
       </section>
