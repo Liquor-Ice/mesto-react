@@ -6,17 +6,22 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
+  const [nameValid, setNameValid] = React.useState(false);
+  const [descriptionValid, setDescriptionValid] = React.useState(false);
+  let formValid = nameValid && descriptionValid;
 
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser])
+  }, [currentUser, isOpen])
 
   function handleNameChange(e) {
     setName(e.target.value);
+    setNameValid(e.target.validity.valid)
   }
   function handleDescriptionChange(e) {
     setDescription(e.target.value);
+    setDescriptionValid(e.target.validity.valid)
   }
   function handleSubmit(e) {
     e.preventDefault();
@@ -33,8 +38,9 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
       name="profile"
       isOpen={isOpen}
       onClose={onClose}
-      buttonText="Сохранить"
       onSubmit={handleSubmit}
+      valid={formValid}
+      buttonText="Сохранить"
     >
       <input 
         id="name-input"
@@ -42,7 +48,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         name="name"
         placeholder="Имя"
         type="text"
-        value={name}
+        value={name || ''}
         onChange={handleNameChange}
         minLength="2"
         maxLength="40"
@@ -55,7 +61,7 @@ function EditProfilePopup({isOpen, onClose, onUpdateUser}) {
         name="about"
         placeholder="О себе"
         type="text"
-        value={description}
+        value={description || ''}
         onChange={handleDescriptionChange}
         minLength="2"
         maxLength="200"

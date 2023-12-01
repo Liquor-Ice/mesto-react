@@ -15,14 +15,21 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
   const [selectedCard, setSelectedCard] = React.useState({name: '', link: ''});
-  const [currentUser, setCurrentUser] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState({});
+  const [cards, setCards] = React.useState([]);
 
   React.useEffect(() => {
     api.getUserInfo()
     .then(data => {
-      setCurrentUser(data);
+      setCurrentUser(data)
     })
-    .catch(console.error)
+    .catch(console.error);
+
+    api.getInitialCards()
+      .then(data => {
+        setCards(data)
+      })
+      .catch(console.error);
   }, []);
 
   function handleEditAvatarClick() {
@@ -42,18 +49,21 @@ function App() {
       setCurrentUser(newData);
       closeAllPopups();
     })
+    .catch(console.error)
   };
   function handleUpdateAvatar(data) {
     api.changeAvatar(data).then((newData) => {
       setCurrentUser(newData);
       closeAllPopups();
     })
+    .catch(console.error)
   }
   function handleAddPlaceSubmit(card) {
     api.addCard(card).then((newCard) => {
       setCards([newCard, ...cards]);
       closeAllPopups();
     })
+    .catch(console.error)
   };
   
   function closeAllPopups() {
@@ -63,16 +73,6 @@ function App() {
     setSelectedCard({name: '', link: ''});
   }
 
-  const [cards, setCards] = React.useState([]);
-
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then(data => {
-        setCards(data)
-      })
-      .catch(console.error)
-  }, [])
-
   function handleCardLike(card) {
     // Проверяем, есть ли уже лайк на этой карточке
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -80,13 +80,15 @@ function App() {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.changeLikeCardStatus(card._id, isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-    });
+    })
+    .catch(console.error);
   }
   function handleCardDelete(card) {
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.deleteCard(card._id).then(() => {
         setCards((state) => state.filter((c) => {return c._id !== card._id}));
-    });
+    })
+    .catch(console.error);
   }
 
   return (
